@@ -8,7 +8,7 @@ jobs:
       - name: ls command
         run: ls -la
       - name: checkout
-        uses: actions/checkout
+        uses: actions/checkout@v3
       - name: ls command 2
         run: ls -la
       - run: echo "Start building the application"
