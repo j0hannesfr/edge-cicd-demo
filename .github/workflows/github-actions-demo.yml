@@ -1,17 +1,15 @@
 name: App Deployment Workflow
-run-name: build and upload new app version
+run-name: Build and upload new app version
 on: [push]
 jobs:
   App-Deployment-Pipeline:
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
       - name: Build Step
         run: |
           echo "Start building the application"
           cd app
-          docker-compose --host tcp://docker:2375 build
+          docker compose --host tcp://docker:2375 build
           docker --host tcp://docker:2375 images
           cd ..
       - run: echo "Start uploading the application"
