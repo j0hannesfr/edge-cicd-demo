@@ -45,9 +45,9 @@ jobs:
           iectl config add iem --name "iemdev" --url $IEM_URL --user $IEM_USER --password ${{ secrets.IEM_PW }}
 
           # add new app version
-          iectl publisher app-project version create -a $APP_ID -v 0.0.1 -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
+          iectl publisher app-project version create -a $APP_ID -v 0.0.2 -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
 
           # upload app version
-          iectl publisher app-project upload project -a $APP_NAME -v 0.0.1
+          # iectl publisher app-project upload project -a $APP_NAME -v 0.0.1
 
       - run: echo "App deploymemt complete"
