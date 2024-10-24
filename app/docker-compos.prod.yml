@@ -7,4 +7,3 @@ services:
     volumes:
       - './publish/:/publish/'
       - './cfg-data/:/cfg-data/'
-
