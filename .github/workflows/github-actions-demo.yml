@@ -1,6 +1,13 @@
 name: App Deployment Workflow
+
 run-name: Build and upload new app version
+
 on: [push]
+
+env:
+  IEM_URL: "https://192.168.30.4"
+  IEM_USER: "johannes.frisch@siemens.com"
+  
 jobs:
   App-Deployment-Pipeline:
     runs-on: self-hosted
@@ -17,8 +24,13 @@ jobs:
       - name: Upload Step
         run: |
           echo "Initialize IECTL"
+
           # set enviroment variables
           export IE_SKIP_CERTIFICATE=true
           export EDGE_SKIP_TLS=1
 
+          # create workspace
+          rm -rf workspace
+          mkdir workspace
+          
       - run: echo "App deploymemt complete"
