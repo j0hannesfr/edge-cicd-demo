@@ -20,14 +20,15 @@ jobs:
           # set enviroment variables
           export IE_SKIP_CERTIFICATE=true
           export EDGE_SKIP_TLS=1
-          # add docker engine
-          iectl config add publisher --name "publisherdev" --dockerurl "http://127.0.0.1:2375" --workspace "./workspace"
           # initialize workspace
           rm -rf workspace
           mkdir workspace
           cd workspace
           iectl publisher workspace init
           cd ..
+          # add docker engine
+          iectl config add publisher --name "publisherdev" --dockerurl "http://127.0.0.1:2375" --workspace "./workspace"
+          # copy app data to workspace
           cp -RT app ./workspace
           cd workspace
           # add IEM credentials
