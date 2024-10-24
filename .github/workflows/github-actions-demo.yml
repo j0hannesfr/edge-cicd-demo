@@ -29,10 +29,14 @@ jobs:
           export IE_SKIP_CERTIFICATE=true
           export EDGE_SKIP_TLS=1
 
-          # create workspace
+          # create empty folder
           rm -rf workspace
           mkdir workspace
-          cd workspace
+
+          # add docker engine
+          iectl config add publisher --name "publisherdev" --dockerurl "http://127.0.0.1:2375" --workspace "./workspace"
+
+          # init workspace
           iectl publisher workspace init
           cd ..
 
