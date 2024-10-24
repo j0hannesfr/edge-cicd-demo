@@ -11,9 +11,26 @@ jobs:
         run: |
           echo "Start building the application"
           cd app
-          ls -la
           docker compose build
           docker images
           cd ..
-      - run: echo "Start uploading the application"
+      - name: Upload Step
+        run: |
+          echo "Initialize IECTL"
+          # set enviroment variables
+          export IE_SKIP_CERTIFICATE=true
+          export EDGE_SKIP_TLS=1
+          # add docker engine
+          iectl config add publisher --name "publisherdev" --dockerurl "http://127.0.0.1:2375" --workspace "./workspace"
+          # initialize workspace
+          rm -rf workspace
+          mkdir workspace
+          cd workspace
+          iectl publisher workspace init
+          cd ..
+          cp -RT app ./workspace
+          cd workspace
+          # add IEM credentials
+          # create app version
+          # upload app
       - run: echo "App deploymemt complete"
