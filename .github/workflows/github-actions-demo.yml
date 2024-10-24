@@ -32,5 +32,8 @@ jobs:
           # create workspace
           rm -rf workspace
           mkdir workspace
-          
+          cd workspace
+          iectl publisher workspace init
+          cd ..
+
       - run: echo "App deploymemt complete"
