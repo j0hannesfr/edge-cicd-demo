@@ -5,12 +5,14 @@ jobs:
   App-Deployment-Pipeline:
     runs-on: self-hosted
     steps:
-      - name: ls command
-        run: ls -la
-      - name: checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
-      - name: ls command 2
-        run: ls -la
-      - run: echo "Start building the application"
+      - name: Build Step
+        run: |
+          echo "Start building the application"
+          cd app
+          docker-compose --host tcp://docker:2375 build
+          docker --host tcp://docker:2375 images
+          cd ..
       - run: echo "Start uploading the application"
       - run: echo "App deploymemt complete"
