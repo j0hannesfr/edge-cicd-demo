@@ -5,10 +5,13 @@ jobs:
   App-Deployment-Pipeline:
     runs-on: self-hosted
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Build Step
         run: |
           echo "Start building the application"
           cd app
+          ls -la
           docker compose build
           docker images
           cd ..
