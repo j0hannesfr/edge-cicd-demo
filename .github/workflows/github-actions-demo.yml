@@ -10,7 +10,7 @@ env:
   APP_ID: "9c7bca0a2e9f4bc1ab00c8b2dcf43bf7"
   APP_NAME: "CICD-Test"
   DEVICE_ID: "cc7d0c088c43425d968b9f2d760e4229"
-  VERSION: v0.0.3
+  VERSION: "v0.0.3"
   
 jobs:
   App-Deployment-Pipeline:
