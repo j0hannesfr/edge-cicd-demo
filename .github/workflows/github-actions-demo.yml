@@ -50,6 +50,10 @@ jobs:
           iectl publisher app-project version create -a $APP_ID -v $VERSION -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
       - name: Install App
         run: |
+          # set enviroment variables
+          export IE_SKIP_CERTIFICATE=true
+          export EDGE_SKIP_TLS=1
+          
           # install new version on device
           iectl  iem app-project install   -a $APP_NAME   --version $VERSION  --info-map '{"devices":["$DEVICE_ID"]}'   # not working?
 
