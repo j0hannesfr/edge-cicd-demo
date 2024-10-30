@@ -10,7 +10,7 @@ env:
   APP_ID: "9c7bca0a2e9f4bc1ab00c8b2dcf43bf7"
   APP_NAME: "CICD-Test"
   DEVICE_ID: "cc7d0c088c43425d968b9f2d760e4229"
-  VERSION: "0.0.3"
+  VERSION: "0.0.4" # todo: fetch version number and increase automatically
   
 jobs:
   App-Deployment-Pipeline:
@@ -50,6 +50,6 @@ jobs:
           iectl publisher app-project version create -a $APP_ID -v $VERSION -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
 
           # install new version on device
-          iectl  iem app-project install   -a $APP_NAME   --version $VERSION  --info-map '{"devices":["$DEVICE_ID"]}'
+          iectl  iem app-project install   -a $APP_NAME   --version $VERSION  --info-map '{"devices":["$DEVICE_ID"]}'   # not working?
 
       - run: echo "App deploymemt complete"
