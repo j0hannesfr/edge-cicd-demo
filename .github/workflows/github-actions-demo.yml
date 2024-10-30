@@ -7,7 +7,7 @@ on: [push]
 # adjust if needed and set secret IEM_PW in Github Repo settings
 env:
   IEM_URL: "https://iemv2.rcde-fachberatung.de"
-  IEM_USER: "iemdemo@siemens.com"
+  IEM_USER: "iemdemo@gmx.de"
   APP_ID: "5b1d4998406a4682acff1f5008869bb7"
   APP_NAME: "Hello Edge"
   PROJECT_NAME: "CICD-Demoprojekt"
