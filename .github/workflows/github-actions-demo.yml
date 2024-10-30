@@ -14,7 +14,7 @@ env:
   DEVICE_ID: "09bd8699e9734f918001baf6e61bd499"
   
 jobs:
-  App-Deployment-Pipeline:
+  App-Development-Pipeline:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
@@ -47,11 +47,7 @@ jobs:
           iectl config add iem --name "iemdev" --url "$IEM_URL" --user "$IEM_USER" --password "${{ secrets.IEM_PW }}"
 
           # get version number
-          OLD_VERSION=$(iectl iem app-project app-details --project-name "$PROJECT_NAME" --app-name "$APP_NAME" | jq -r '.versions[0].versionNumber')
-          # Check if OLD_VERISON is empty or null and set a default if needed
-          if [ -z "$OLD_VERSION" ]; then
-            OLD_VERSION="0.0.0"
-          fi
+          OLD_VERSION=$(iectl iem app-project app-details --project-name "$PROJECT_NAME" --app-name "$APP_NAME" | jq -r '.versions[0].versionNumber // "0.0.0"')
           # Split the version into an array using '.' as the delimiter
           IFS='.' read -r -a version_parts <<< "$OLD_VERSION"
           # Increment the last part
