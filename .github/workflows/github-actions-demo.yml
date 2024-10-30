@@ -18,14 +18,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Build Step
+      - name: Build App
         run: |
           echo "Start building the application"
           cd app
           docker compose build
           docker images
           cd ..
-      - name: Upload Step
+      - name: Upload App
         run: |
           echo "Initialize IECTL"
 
@@ -57,4 +57,3 @@ jobs:
           # install new version on device
           iectl  iem app-project install   -a $APP_NAME   --version $VERSION  --info-map "{\"devices\":[\"$DEVICE_ID\"]}"
 
-      - run: echo "App deploymemt complete"
