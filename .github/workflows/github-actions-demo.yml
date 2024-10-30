@@ -4,13 +4,14 @@ run-name: Build, upload and install new app version
 
 on: [push]
 
+# adjust if needed and set secret IEM_PW in Github Repo settings
 env:
-  IEM_URL: "https://192.168.30.4"
-  IEM_USER: "johannes.frisch@siemens.com"
-  APP_ID: "9c7bca0a2e9f4bc1ab00c8b2dcf43bf7"
-  APP_NAME: "CICD-Test"
-  PROJECT_NAME: "DevTests"
-  DEVICE_ID: "cc7d0c088c43425d968b9f2d760e4229"
+  IEM_URL: "https://iemv2.rcde-fachberatung.de"
+  IEM_USER: "iemdemo@siemens.com"
+  APP_ID: "5b1d4998406a4682acff1f5008869bb7"
+  APP_NAME: "Hello Edge"
+  PROJECT_NAME: "CICD-Demoprojekt"
+  DEVICE_ID: "09bd8699e9734f918001baf6e61bd499"
   
 jobs:
   App-Deployment-Pipeline:
@@ -23,7 +24,6 @@ jobs:
           echo "Start building the application"
           cd app
           docker compose build
-          docker images
           cd ..
       - name: Upload and install app
         run: |
@@ -48,6 +48,10 @@ jobs:
 
           # get version number
           OLD_VERSION=$(iectl iem app-project app-details --project-name $PROJECT_NAME --app-name $APP_NAME | jq -r '.versions[0].versionNumber')
+          # Check if OLD_VERISON is empty or null and set a default if needed
+          if [ -z "$OLD_VERSION" ]; then
+            OLD_VERSION="0.0.0"
+          fi
           # Split the version into an array using '.' as the delimiter
           IFS='.' read -r -a version_parts <<< "$OLD_VERSION"
           # Increment the last part
