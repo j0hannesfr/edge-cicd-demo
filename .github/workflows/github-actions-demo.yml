@@ -44,10 +44,10 @@ jobs:
           iectl publisher workspace init
 
           # add IEM config
-          iectl config add iem --name "iemdev" --url $IEM_URL --user $IEM_USER --password ${{ secrets.IEM_PW }}
+          iectl config add iem --name "iemdev" --url "$IEM_URL" --user "$IEM_USER" --password "${{ secrets.IEM_PW }}"
 
           # get version number
-          OLD_VERSION=$(iectl iem app-project app-details --project-name $PROJECT_NAME --app-name $APP_NAME | jq -r '.versions[0].versionNumber')
+          OLD_VERSION=$(iectl iem app-project app-details --project-name "$PROJECT_NAME" --app-name "$APP_NAME" | jq -r '.versions[0].versionNumber')
           # Check if OLD_VERISON is empty or null and set a default if needed
           if [ -z "$OLD_VERSION" ]; then
             OLD_VERSION="0.0.0"
@@ -61,8 +61,8 @@ jobs:
           export NEW_VERSION
 
           # add new app version
-          iectl publisher app-project version create -a $APP_ID -v $NEW_VERSION -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
+          iectl publisher app-project version create -a "$APP_ID" -v "$NEW_VERSION" -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
 
           # install new version on device
-          iectl  iem app-project install   -a $APP_NAME   --version $NEW_VERSION  --info-map "{\"devices\":[\"$DEVICE_ID\"]}"
+          iectl  iem app-project install   -a "$APP_NAME"   --version "$NEW_VERSION"  --info-map "{\"devices\":[\"$DEVICE_ID\"]}"
 
