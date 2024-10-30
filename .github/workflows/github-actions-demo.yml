@@ -1,6 +1,6 @@
-name: App Deployment Workflow
+name: App Development Workflow
 
-run-name: Build and upload new app version
+run-name: Build, upload and install new app version
 
 on: [push]
 
@@ -9,8 +9,8 @@ env:
   IEM_USER: "johannes.frisch@siemens.com"
   APP_ID: "9c7bca0a2e9f4bc1ab00c8b2dcf43bf7"
   APP_NAME: "CICD-Test"
+  PROJECT_NAME: "DevTests"
   DEVICE_ID: "cc7d0c088c43425d968b9f2d760e4229"
-  VERSION: "0.0.7" # todo: fetch version number and increase automatically
   
 jobs:
   App-Deployment-Pipeline:
@@ -18,14 +18,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Build App
+      - name: Build app
         run: |
           echo "Start building the application"
           cd app
           docker compose build
           docker images
           cd ..
-      - name: Upload App
+      - name: Upload and install app
         run: |
           echo "Initialize IECTL"
 
@@ -46,14 +46,19 @@ jobs:
           # add IEM config
           iectl config add iem --name "iemdev" --url $IEM_URL --user $IEM_USER --password ${{ secrets.IEM_PW }}
 
+          # get version number
+          OLD_VERSION=$(iectl iem app-project app-details --project-name $PROJECT_NAME --app-name $APP_NAME | jq -r '.versions[0].versionNumber')
+          # Split the version into an array using '.' as the delimiter
+          IFS='.' read -r -a version_parts <<< "$OLD_VERSION"
+          # Increment the last part
+          version_parts[2]=$((version_parts[2] + 1))
+          # Reassemble the version number
+          NEW_VERSION="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+          export NEW_VERSION
+
           # add new app version
-          iectl publisher app-project version create -a $APP_ID -v $VERSION -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
-      - name: Install App
-        run: |
-          # set enviroment variables
-          export IE_SKIP_CERTIFICATE=true
-          export EDGE_SKIP_TLS=1
+          iectl publisher app-project version create -a $APP_ID -v $NEW_VERSION -y ./app/docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
 
           # install new version on device
-          iectl  iem app-project install   -a $APP_NAME   --version $VERSION  --info-map "{\"devices\":[\"$DEVICE_ID\"]}"
+          iectl  iem app-project install   -a $APP_NAME   --version $NEW_VERSION  --info-map "{\"devices\":[\"$DEVICE_ID\"]}"
 
