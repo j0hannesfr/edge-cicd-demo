@@ -46,9 +46,10 @@ jobs:
           # add IEM config
           iectl config add iem --name "iemdev" --url "$IEM_URL" --user "$IEM_USER" --password "${{ secrets.IEM_PW }}"
 
-          # Fetch tokens once
-          echo "Fetching authentication tokens..."
-          export IEM_TOKEN=$(iectl iem token fetch -q "{.data.access_token}")
+          # Token authenzication doesn't seem to work reliably
+          # # Fetch tokens once
+          # echo "Fetching authentication tokens..."
+          # export IEM_TOKEN=$(iectl iem token fetch -q "{.data.access_token}")
 
           # get version number
           OLD_VERSION=$(iectl iem app-project app-details --project-name "$PROJECT_NAME" --app-name "$APP_NAME" | jq -r '.versions[0].versionNumber // "0.0.0"')
